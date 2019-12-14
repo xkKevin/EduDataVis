@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+
+<head>
+    <meta charset="utf-8">
+</head>
+
+<body style="height: 100%; margin: 0">
+<div id="container" style="height: 100%"></div>
+<script type="text/javascript" src="js/echarts.min.js"></script>
+
+<script type="text/javascript" src="js/china.js"></script>
+
+<script type="text/javascript">
+
+    function randomData() {
+        return Math.round(Math.random()*100);
+    }
+
+    var dataMap =[
+        {name: '北京',value: randomData() },{name: '天津',value: randomData() },
+        {name: '上海',value: randomData() },{name: '重庆',value: randomData() },
+        {name: '河北',value: randomData() },{name: '河南',value: randomData() },
+        {name: '云南',value: randomData() },{name: '辽宁',value: randomData() },
+        {name: '黑龙江',value: randomData() },{name: '湖南',value: randomData() },
+        {name: '安徽',value: randomData() },{name: '山东',value: randomData() },
+        {name: '新疆',value: randomData() },{name: '江苏',value: randomData() },
+        {name: '浙江',value: randomData() },{name: '江西',value: randomData() },
+        {name: '湖北',value: randomData() },{name: '广西',value: randomData() },
+        {name: '甘肃',value: randomData() },{name: '山西',value: randomData() },
+        {name: '内蒙古',value: randomData() },{name: '陕西',value: randomData() },
+        {name: '吉林',value: randomData() },{name: '福建',value: randomData() },
+        {name: '贵州',value: randomData() },{name: '广东',value: randomData() },
+        {name: '青海',value: randomData() },{name: '西藏',value: randomData() },
+        {name: '四川',value: randomData() },{name: '宁夏',value: randomData() },
+        {name: '海南',value: randomData() },{name: '台湾',value: randomData() },
+        {name: '香港',value: randomData() },{name: '澳门',value: randomData() },{name: '南海诸岛',value: randomData() }
+    ];
+
+    var myChart = echarts.init(document.getElementById("container"));
+
+    option = {
+        tooltip: {
+            formatter:function(params,ticket, callback){
+                // return params.seriesName+'<br />'+params.name+'：'+params.value
+                return params.name+'：'+params.value
+            }//数据格式化
+        },
+        visualMap: {
+            min: 0,
+            max: 110,
+            left: '180px',
+            top: 'center',
+            text: ['高','低'],//取值范围的文字
+            inRange: {
+                color: ['#e0ffff', '#006edd']//取值范围的颜色
+            },
+            show:true//图注
+        },
+        geo: {
+            map: 'china',
+            roam: false,//不开启缩放和平移
+            zoom:1.2,//视角缩放比例（指的是整个地图是正常地图的缩放情况）
+            label: {
+                normal: {
+                    show: true,
+                    fontSize:'10',
+                    color: 'rgba(0,0,0,0.7)'
+                }
+            },
+            itemStyle: {
+                normal:{
+                    borderColor: 'rgba(0, 0, 0, 0.2)'
+                },
+                emphasis:{
+                    areaColor: '#F3B329',//鼠标选择区域颜色
+                    shadowOffsetX: 0,  // 边界阴影部分朝向那边
+                    shadowOffsetY: 0,
+                    shadowBlur: 20, // 阴影范围
+                    borderWidth: 0, // 边界粗细程度
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            }
+        },
+        series: [{
+            name: '中国',
+            type: 'map',
+            geoIndex: 0,
+            data:dataMap
+        }]
+    };
+
+    myChart.setOption(option, true);
+</script>
+</body>
+
+</html>
