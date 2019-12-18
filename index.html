@@ -6,12 +6,24 @@
     <script type="text/javascript" src="js/echarts.min.js"></script>
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/dataTool.js"></script>
     <script type="text/javascript" src="js/china.js"></script>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="css/system_nav.css">
-<style>
+    <link rel="stylesheet" href="css/bootstrap-select.min.css" />
+    <script src="js/bootstrap-select.min.js"></script>
 
+    <link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css" />
+    <script src="js/bootstrap-datetimepicker.min.js"></script>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/system_nav.css">
+
+    <link rel="stylesheet" href="css/wrapper.css">
+
+<style>
+    .bootstrap-select{
+        width: 150px !important;
+    }
 </style>
 </head>
 <body>
@@ -20,23 +32,249 @@
         <li class="slide1"></li>
         <li class="slide2"></li>
         <li class="system_name">EduDataVis</li>
-        <li><a name="0" class="active">基本信息</a></li>
-        <li><a name="1" >02</a></li>
-        <li><a name="2" >03</a></li>
-        <li><a name="3" >04</a></li>
-        <li><a name="4" >05</a></li>
-        <li><a name="5" >06</a></li>
-        <li style="position: absolute; right: 30px; line-height: 2.75;"><span class="badge" id="systemGuide" title="查看使用说明">系统指南</span></li>
+        <li><a name="0" class="active">教师信息</a></li>
+        <li><a name="1" >学生整体信息</a></li>
+        <li><a name="2" >年级成绩信息</a></li>
+        <li onclick="consumption_month_funnel()"><a name="3" >学生消费信息</a></li>
+        <li onclick="select7_3()"><a name="4" >高考7选3</a></li>
+        <li><a name="5" >学生成绩信息</a></li>
+        <li><a name="6" >学生出勤信息</a></li>
+        <!--<li style="position: absolute; right: 30px; line-height: 2.75;"><span class="badge" id="systemGuide" title="查看使用说明">系统指南</span></li>-->
     </ul>
 </div>
 <div style="margin-bottom: 65px;"></div>
 
-<div class="system_module">01</div>
-<div class="system_module" style="display: none;">02</div>
-<div class="system_module" style="display: none;">03</div>
-<div class="system_module" style="display: none;">04</div>
-<div class="system_module" style="display: none;">05</div>
-<div class="system_module" style="display: none;">06</div>
+<div class="system_module">
+    <div style="padding-left: 50px; margin-bottom: 20px;">
+        <b>选择学期：</b>
+        <select id="select_term_faculty" class="selectpicker" data-live-search="true" data-actions-box="true">
+            <option value="2014-2015-1">2014-2015-1</option>
+            <option value="2014-2015-2">2014-2015-2</option>
+            <option value="2015-2016-1">2015-2016-1</option>
+            <option value="2015-2016-2">2015-2016-2</option>
+            <option value="2016-2017-1">2016-2017-1</option>
+            <option value="2016-2017-2">2016-2017-2</option>
+            <option value="2017-2018-1">2017-2018-1</option>
+            <option value="2017-2018-2">2017-2018-2</option>
+            <option value="2018-2019-1">2018-2019-1</option>
+        </select>&nbsp;&nbsp;
+        <button class="btn btn-success" onclick="course_faculty()">确认选择</button>
+    </div>
+    <div id="course_faculty" style="height: 550px;"></div>
+</div>
+<div class="system_module" style="display: none;padding-left: 10px">
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <b>选择年级：</b>
+    <select id="select_grade" class="selectpicker" data-actions-box="true">
+        <option value="高一">高一</option>
+        <option value="高二">高二</option>
+        <option value="高三">高三</option>
+    </select>&nbsp;&nbsp;
+    <!--<b>选择班级：</b>-->
+    <!--<select id="select_class" class="selectpicker" multiple>-->
+        <!--<option value="1">1</option>-->
+        <!--<option value="2">2</option>-->
+        <!--<option value="3">3</option>-->
+        <!--<option value="4">4</option>-->
+        <!--<option value="5">5</option>-->
+        <!--<option value="6">6</option>-->
+    <!--</select>&nbsp;&nbsp;-->
+    <button class="btn btn-success" onclick="student_origin()">确认选择</button>
+    <div class="row">
+        <div id="student_origin" class="col-md-8" style="height: 600px;"></div>
+        <div class="col-md-4" style="height: 600px;">
+            <div id="gender_distribution" style="height: 300px;"></div>
+            <div id="nation_distribution" style="height: 300px;"></div>
+        </div>
+    </div>
+</div>
+<div class="system_module" style="display: none;">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <b>年级：</b>
+    <select id="select_grade_score" class="selectpicker" data-actions-box="true">
+        <option value="高一">高一</option>
+        <option value="高二">高二</option>
+        <option value="高三">高三</option>
+    </select>&nbsp;&nbsp;
+    <b>考试：</b>
+    <select id="select_type_score" class="selectpicker" data-actions-box="true">
+        <option value="期中">期中考试</option>
+        <option value="期末">期末考试</option>
+    </select>&nbsp;&nbsp;
+    <b>课程：</b>
+    <select id="select_course_score" class="selectpicker" data-live-search="true" data-actions-box="true">
+        <option value="语文">语文</option>
+        <option value="数学">数学</option>
+        <option value="英语">英语</option>
+        <option value="历史">历史</option>
+        <option value="政治">政治</option>
+        <option value="地理">地理</option>
+        <option value="物理">物理</option>
+        <option value="化学">化学</option>
+        <option value="生物">生物</option>
+        <option value="技术">技术</option>
+    </select>&nbsp;&nbsp;
+    <button class="btn btn-success" onclick="grage_course()">确认选择</button>
+    <div id="grade_score" style="height: 550px; margin-top: 18px;"></div>
+    <div id="grade_score_bar" style="height: 550px;"></div>
+</div>
+<div class="system_module" style="display: none;">
+    <div class="row">
+        <details class="col-md-6" open>
+            <summary>
+                <span class="summary-title">学生月平均消费区间段分布情况</span>
+            </summary>
+            <div class="summary-content">
+                <div id="consumption_month" style="height: 500px;"></div>
+            </div>
+        </details>
+        <details class="col-md-6" open>
+            <summary>
+                <span class="summary-title">学生日消费情况</span>
+            </summary>
+            <div class="summary-content">
+                <div class="form-group row" style="margin-bottom: -5px;">
+                    <label for="dtp_input1" class="control-label col-md-3" style="line-height: 34px; text-align: right;">选择日期：</label>
+                    <div class="input-group date form_date col-md-6" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input1" data-link-format="yyyy-mm-dd">
+                        <input class="form-control" size="16" type="text" value="" readonly>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-ok" onclick="consumption_day()"></span></span>
+                    </div>
+                    <input type="hidden" id="dtp_input1" value="" /><br/>
+                </div>
+                <div id="consumption_day" style="height: 441px;"></div>
+            </div>
+        </details>
+    </div>
+    <div class="row">
+        <details open>
+            <summary>
+                <span class="summary-title">学生每月消费情况曲线图</span>
+            </summary>
+            <div class="summary-content">
+                <table align="center"  style="margin-bottom: 20px;">
+                    <tbody>
+                    <tr>
+                        <td style="padding-right: 20px;">
+                            <div class="input-group">
+                                <span class="input-group-addon">学生学号</span>
+                                <input class="form-control" type="text" id="studentId" value="13564">
+                            </div>
+                        </td>
+                        <td style="padding-right: 10px">
+                            <div class="input-group">
+                                <span class="input-group-addon">学年</span>
+                                <input class="form-control" type="text" id="year" value="2018-2019" disabled>
+                            </div>
+                        </td>
+                        <td>
+                            <label class="btn btn-success" onclick="student_avg_consumption()">确定</label>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div id="student_avg_consumption" style="height: 500px;"></div>
+            </div>
+        </details>
+    </div>
+</div>
+<div class="system_module" style="display: none;">
+    <div id="select_73_one" class="col-md-4" style="height: 400px;"></div>
+    <div id="select_73_three" class="col-md-8" style="height: 400px;"></div>
+</div>
+<div class="system_module" style="display: none;">
+    <div class="col-md-5">
+        <table align="center" style="margin-bottom: 20px;">
+            <tbody>
+            <tr>
+                <td style="padding-right: 20px;">
+                    <div class="input-group">
+                        <span class="input-group-addon">学号</span>
+                        <input class="form-control" type="text" id="single_studentId" style="width: 120px;" value="123">
+                    </div>
+                </td>
+                <td style="padding-right: 5px">
+                    <b>学期&nbsp;</b>
+                    <select id="select_term" class="selectpicker" data-actions-box="true">
+                        <!--<option value="0">总共均分</option>-->
+                        <option value="1">高一上</option>
+                        <option value="2">高一下</option>
+                        <option value="3">高二上</option>
+                        <option value="4">高二下</option>
+                        <option value="5">高三上</option>
+                        <option value="6">高三下</option>
+                    </select>&nbsp;&nbsp;
+                </td>
+                <td>
+                    <label class="btn btn-success" onclick="single_student_score()">确定</label>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div id="single_student_score" style="height: 500px;"></div>
+    </div>
+    <div class="col-md-7">
+        <table align="center" style="margin-bottom: 20px;">
+            <tbody>
+            <tr>
+                <td style="padding-right: 20px;">
+                    <div class="input-group">
+                        <span class="input-group-addon">学号</span>
+                        <input class="form-control" type="text" id="single_studentId2" style="width: 120px;"  value="123">
+                    </div>
+                </td>
+                <td style="padding-right: 5px">
+                    <b>课程&nbsp;</b>
+                    <select id="select_course" class="selectpicker" data-actions-box="true">
+                        <option value="1">语文</option>
+                        <option value="2">数学</option>
+                        <option value="3">英语</option>
+                        <option value="4">历史</option>
+                        <option value="5">政治</option>
+                        <option value="6">地理</option>
+                        <option value="7">物理</option>
+                        <option value="8">化学</option>
+                        <option value="9">生物</option>
+                        <option value="10">技术</option>
+                    </select>&nbsp;&nbsp;
+                </td>
+                <td>
+                    <label class="btn btn-success" onclick="single_student_course()">确定</label>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div id="single_student_course" style="height: 500px;"></div>
+    </div>
+</div>
+<div class="system_module" style="display: none;">
+    <div class="form-group row" style="margin-bottom: -5px;">
+        <label for="dtp_input2" class="control-label col-md-3" style="line-height: 34px; text-align: right;">选择日期：</label>
+        <div class="input-group date form_date col-md-6" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+            <input class="form-control" size="16" type="text" value="" readonly>
+            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+            <span class="input-group-addon"><span class="glyphicon glyphicon-ok" onclick="kaoqin_allStudent()"></span></span>
+        </div>
+        <input type="hidden" id="dtp_input2" value="" /><br/>
+    </div>
+    <div id="kaoqin_allStudent" style="height: 500px;"></div>
+</div>
 </body>
 <script type="text/javascript" src="js/eduvis.js"></script>
+<script type="text/javascript" src="js/visChart.js"></script>
+<script>
+    $('.form_date').datetimepicker({
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0,
+        startDate: new Date("2014-01-02"),
+        endDate: new Date("2019-01-26")
+    });
+</script>
 </html>
